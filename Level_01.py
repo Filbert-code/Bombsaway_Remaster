@@ -18,19 +18,19 @@ class Level_01(Level):
         self.all_sprites.add(self.player)
         pygame.mixer.music.load('sounds/chiptunes_level_1.wav')
         pygame.mixer.music.set_volume(0.55)
-        self.spawn_wave = 1
         self.starting_pos = -7080
         self.player = player
         self.screen = screen
         self.clock = clock
         ##############
-        # Controls number of regular mob waves:
-        self.max_mob_spawns = 6
-        self.mob_draw_time = pygame.time.get_ticks()
+        # Level-child attributes:
         self.bombs = 1
-        self.missiles = 1
-        # Moving cars variables:
         self.total = None
+        self.bomb_frame = 20
+        self.spawned_a_boss = 0
+        self.spawn_powerups()
+
+
         self.cars_up_images = []
         self.cars_down_images = []
         self.cars_up_y = {}
@@ -43,13 +43,11 @@ class Level_01(Level):
         self.cars_down_x = [415, 447]
         self.car_up_images()
         self.car_down_images()
-        self.spawn_powerups()
-        self.last_death = pygame.time.get_ticks()
-        self.bg_ticks = pygame.time.get_ticks()
+
+
+
         self.last_bomb = pygame.time.get_ticks()
         self.last_bomb_anim = pygame.time.get_ticks()
-        self.bomb_frame = 20
-        self.spawned_a_boss = 0
         self.mob_01_left_ticks = pygame.time.get_ticks()
         self.mob_01_right_ticks = pygame.time.get_ticks()
         self.mob_02_left_ticks = pygame.time.get_ticks()
@@ -61,6 +59,7 @@ class Level_01(Level):
         self.mob_01_delay = pygame.time.get_ticks()
         self.mob_02_delay = pygame.time.get_ticks()
         self.laser_charge_time = pygame.time.get_ticks()
+
         # Level Summary tracking information:
         self.number_of_spawns = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0}
         self.total_fighters_killed = 0
@@ -664,7 +663,6 @@ class Level_01(Level):
         # text.draw_text(self.screen, 'AMMO: ' + str(self.player.ammo), 30, constants.WIDTH - 70, constants.HEIGHT - 120, constants.BLACK, "Haettenschweiler")
         text.draw_text(self.screen, 'BOMBS: ' + str(self.bombs), 20, 140, 497, constants.RED, "Haettenschweiler")
         text.draw_text(self.screen, 'Time: ' + str(round(summary.time/1000)), 20, 140, 470, constants.RED, "Haettenschweiler")
-        # text.draw_text(self.screen, 'MISSILES: ' + str(self.missiles), 30, constants.WIDTH - 70, constants.HEIGHT - 40, constants.BLACK, "Haettenschweiler")
         text.draw_text(self.screen, 'LIVES: ' + str(self.lives), 30, 50, 10, constants.GREEN, "Haettenschweiler")
         text.draw_text(self.screen, '25%', 20, 65, 555, constants.DARK_GREEN, "Haettenschweiler")
         text.draw_text(self.screen, '50%', 20, 115, 555, constants.DARK_GREEN, "Haettenschweiler")

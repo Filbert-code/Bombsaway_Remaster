@@ -22,21 +22,16 @@ class Level_03(Level):
         self.screen = screen
         self.clock = clock
         ##############
-        # Controls number of regular mob waves:
-        self.max_mob_spawns = 6
-        self.mob_draw_time = pygame.time.get_ticks()
+        # Level-child attributes:
         self.bombs = 1
-        self.missiles = 1
-        # Moving cars variables:
         self.total = None
-
-        self.last_death = pygame.time.get_ticks()
-        self.bg_ticks = pygame.time.get_ticks()
-        self.last_bomb = pygame.time.get_ticks()
-        self.last_bomb_anim = pygame.time.get_ticks()
         self.bomb_frame = 20
         self.spawned_a_boss = 0
         self.spawn_powerups()
+
+
+        self.last_bomb = pygame.time.get_ticks()
+        self.last_bomb_anim = pygame.time.get_ticks()
         self.mob_01_left_ticks = pygame.time.get_ticks()
         self.mob_01_right_ticks = pygame.time.get_ticks()
         self.mob_02_left_ticks = pygame.time.get_ticks()
@@ -48,6 +43,7 @@ class Level_03(Level):
         self.mob_01_delay = pygame.time.get_ticks()
         self.mob_02_delay = pygame.time.get_ticks()
         self.laser_charge_time = pygame.time.get_ticks()
+
         # Level Summary tracking information:
         self.number_of_spawns = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0}
         self.total_fighters_killed = 0
@@ -644,7 +640,6 @@ class Level_03(Level):
         # text.draw_text(self.screen, 'AMMO: ' + str(player.ammo), 30, constants.WIDTH - 70, constants.HEIGHT - 120, constants.BLACK, "Haettenschweiler")
         text.draw_text(self.screen, 'BOMBS: ' + str(self.bombs), 20, 140, 497, constants.RED, "Haettenschweiler")
         text.draw_text(self.screen, 'Time: ' + str(round(summary.time/1000)), 20, 140, 470, constants.RED, "Haettenschweiler")
-        # text.draw_text(self.screen, 'MISSILES: ' + str(self.missiles), 30, constants.WIDTH - 70, constants.HEIGHT - 40, constants.BLACK, "Haettenschweiler")
         text.draw_text(self.screen, 'LIVES: ' + str(self.lives), 30, 50, 10, constants.GREEN, "Haettenschweiler")
         text.draw_text(self.screen, '25%', 20, 65, 555, constants.DARK_GREEN, "Haettenschweiler")
         text.draw_text(self.screen, '50%', 20, 115, 555, constants.DARK_GREEN, "Haettenschweiler")
