@@ -45,6 +45,7 @@ class Level:
         self.load_data()
 
         # need to be reset after each level
+        self.start_time = pygame.time.get_ticks()
         self.lives = 50
         self.bombs = 1
         self.number_of_spawns = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
@@ -52,6 +53,10 @@ class Level:
         self.got_a_tank = 0
         self.total_tanks_killed = 0
         self.tank_life = 5
+        self.total_helicopters_killed = 0
+        self.got_a_heli = 0
+        self.heli_life = 20
+
 
     # load data from the highscore.txt file to get saved data
     def load_data(self):
@@ -178,6 +183,23 @@ class Level:
         for every in hits:
             self.bombs += 1
             powerup_sound.play()
+
+    def bombsaway(self):
+        self.exp1_sound = pygame.mixer.Sound('sounds/Explosion1.wav')
+        self.exp1_sound.set_volume(0.3)
+        self.exp2_sound = pygame.mixer.Sound('sounds/Explosion2.wav')
+        self.exp2_sound.set_volume(0.3)
+        mobs = self.mobs.sprites()
+        for every in mobs:
+            every.kill()
+            self.score += 1
+            expl = explosions.Explosion(every.rect.center, 'sm')
+            self.all_sprites.add(expl)
+            explode = random.randrange(2)
+            if explode == 1:
+                self.exp1_sound.play()
+            else:
+                self.exp2_sound.play()
 
     def powerup_speed(self):
         powerup_sound = pygame.mixer.Sound('sounds/ammo_powerup1.wav')
@@ -369,16 +391,17 @@ class Level:
                     self.tank_life -= 1
 
     def heli_spawn(self, spawn_pos_list, heli_attributes):
+        # For-loop won't work...
         for heli_num, ind in enumerate(spawn_pos_list):
-            if self.starting_pos > spawn_pos_list[ind]:
+            if self.starting_pos > spawn_pos_list[heli_num]:
                 if self.got_a_heli == 0:
                     # NEED TO CHANGE TO heli_2...heli_3...depending on number of helicopters
-                    heli_1 = helicopter.Helicopter(heli_attributes[0], heli_attributes[1], heli_attributes[2], heli_attributes[3])
+                    heli_1 = helicopter.Helicopter(heli_attributes[heli_num][0], heli_attributes[heli_num][1], heli_attributes[heli_num][2], heli_attributes[heli_num][3])
                     self.all_sprites.add(heli_1)
                     self.helicopters.add(heli_1)
                     self.got_a_heli += 1
                     self.heli_life = 20
-                if self.got_a_heli == heli_num:
+                if self.got_a_heli == 1:
                     self.mob_bullets.add(helicopter.bullets)
                     self.all_sprites.add(helicopter.bullets)
                     hits = pygame.sprite.groupcollide(self.helicopters, self.bullets, False, True)

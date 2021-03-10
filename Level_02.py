@@ -280,23 +280,6 @@ class Level_02(Level):
             else:
                 self.player.laser_not_ready = False
 
-    def bombsaway(self):
-        self.exp1_sound = pygame.mixer.Sound('sounds/Explosion1.wav')
-        self.exp1_sound.set_volume(0.3)
-        self.exp2_sound = pygame.mixer.Sound('sounds/Explosion2.wav')
-        self.exp2_sound.set_volume(0.3)
-        mobs = self.mobs.sprites()
-        for every in mobs:
-            every.kill()
-            self.score += 1
-            expl = explosions.Explosion(every.rect.center, 'sm')
-            self.all_sprites.add(expl)
-            explode = random.randrange(2)
-            if explode == 1:
-                self.exp1_sound.play()
-            else:
-                self.exp2_sound.play()
-
     def bomb_animation(self):
         now = pygame.time.get_ticks()
         if now - self.last_bomb_anim > 20:

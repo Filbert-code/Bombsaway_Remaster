@@ -44,17 +44,16 @@ class Level_03(Level):
         self.laser_charge_time = pygame.time.get_ticks()
 
         # Level Summary tracking information:
-        self.number_of_spawns = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0}
         self.total_fighters_killed = 0
         self.total_fighters = 0
-        self.total_helicopters_killed = 0
+
         self.total_helicopters = 0
         self.total_tanks = 0
 
         self.number_of_tank_hits = 0
-        self.got_a_heli = 0
+
         self.number_of_heli_hits = 0
-        self.heli_life = 20
+
         self.mob_v2_time = pygame.time.get_ticks()
         self.charge = 0
         self.civ_count = 0
@@ -183,49 +182,6 @@ class Level_03(Level):
             self.shooting_mobs(0, -30, 100, -3, 0, 3, 1000)
             self.shooting_mobs(2, 830, 350, 4, 1, 2, 1500)
 
-    def heli_spawn(self):
-        if self.starting_pos > -4000:
-            if self.got_a_heli == 0:
-                heli_1 = helicopter.Helicopter(-50, 100, 1, 0)
-                self.all_sprites.add(heli_1)
-                self.helicopters.add(heli_1)
-                self.got_a_heli += 1
-                self.heli_life = 20
-            if self.got_a_heli == 1:
-                self.mob_bullets.add(helicopter.bullets)
-                self.all_sprites.add(helicopter.bullets)
-                hits = pygame.sprite.groupcollide(self.helicopters, self.bullets, False, True)
-                for every in hits:
-                    self.heli_life -= 1
-                if self.heli_life < 0 and len(self.helicopters) > 0:
-                    self.charge += 30
-                    self.score += 100000
-                    self.total_helicopters_killed += 1
-                    expl = explosions.Explosion(self.helicopters.sprites()[0].rect.center, 'sm')
-                    self.all_sprites.add(expl)
-                    self.helicopters.sprites()[0].kill()
-
-        if self.starting_pos > -1500:
-            if self.got_a_heli == 1:
-                heli_2 = helicopter.Helicopter(850, 100, -1, 0)
-                self.all_sprites.add(heli_2)
-                self.helicopters.add(heli_2)
-                self.got_a_heli += 1
-                self.heli_life = 20
-            if self.got_a_heli == 2:
-                self.mob_bullets.add(helicopter.bullets)
-                self.all_sprites.add(helicopter.bullets)
-                hits = pygame.sprite.groupcollide(self.helicopters, self.bullets, False, True)
-                for every in hits:
-                    self.heli_life -= 1
-                if self.heli_life < 0 and len(self.helicopters) > 0:
-                    self.charge += 30
-                    self.score += 100000
-                    self.total_helicopters_killed += 1
-                    expl = explosions.Explosion(self.helicopters.sprites()[0].rect.center, 'sm')
-                    self.all_sprites.add(expl)
-                    self.helicopters.sprites()[0].kill()
-
     def boss_spawn(self):
         if self.total == 0 and len(self.mobs) == 0 and self.spawned_a_boss == 0:
             self.boss = boss_3.Boss_3()
@@ -233,22 +189,6 @@ class Level_03(Level):
             self.boss_sprite.add(self.boss)
             self.spawned_a_boss = 1
 
-    def bombsaway(self):
-        self.exp1_sound = pygame.mixer.Sound('sounds/Explosion1.wav')
-        self.exp1_sound.set_volume(0.3)
-        self.exp2_sound = pygame.mixer.Sound('sounds/Explosion2.wav')
-        self.exp2_sound.set_volume(0.3)
-        mobs = self.mobs.sprites()
-        for every in mobs:
-            every.kill()
-            self.score += 1
-            expl = explosions.Explosion(every.rect.center, 'sm')
-            self.all_sprites.add(expl)
-            explode = random.randrange(2)
-            if explode == 1:
-                self.exp1_sound.play()
-            else:
-                self.exp2_sound.play()
 
     def laser_kill(self):
         if len(self.laser_group.sprites()) > 0:

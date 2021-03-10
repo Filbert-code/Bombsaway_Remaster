@@ -32,7 +32,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     menu_timer = pygame.time.get_ticks()
     player = player_module.Player()
-    current_level = Level_01(player, screen, clock)
+    current_level = Level_03(player, screen, clock)
     current_level_no = 1
 
     # game loop
