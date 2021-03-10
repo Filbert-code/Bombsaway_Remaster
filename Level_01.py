@@ -45,7 +45,6 @@ class Level_01(Level):
         self.car_down_images()
         self.spawn_powerups()
         self.last_death = pygame.time.get_ticks()
-        self.lives = 50
         self.bg_ticks = pygame.time.get_ticks()
         self.last_bomb = pygame.time.get_ticks()
         self.last_bomb_anim = pygame.time.get_ticks()

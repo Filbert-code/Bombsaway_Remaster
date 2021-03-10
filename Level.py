@@ -35,6 +35,8 @@ class Level:
         self.highscore_list = []
         self.load_data()
 
+        self.lives = 50
+
     # load data from the highscore.txt file to get saved data
     def load_data(self):
         # finds current working directory
@@ -125,7 +127,7 @@ class Level:
                     self.level_summary()
                     menu.loser_loser()
                     Level.running = False
-                    
+
     def civilian_planes(self):
         civilian_crash = pygame.sprite.spritecollide(self.player, self.civ_group, True,
                                                      pygame.sprite.collide_circle)

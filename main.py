@@ -32,8 +32,8 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     menu_timer = pygame.time.get_ticks()
     player = player_module.Player()
-    current_level = Level_01(player, screen, clock)
-    current_level_no = 1
+    current_level = Level_02(player, screen, clock)
+    current_level_no = 2
 
     # game loop
     #Variables used inside gameloop:
@@ -66,9 +66,8 @@ if __name__ == "__main__":
                     pygame.mixer.music.play(loops = -1)
                     current_level_no += 1
 
-            if len(current_level.boss_sprite) == 0 and current_level_no == 3:
+            elif len(current_level.boss_sprite) == 0 and current_level_no == 3:
                 current_level.level_summary()
-
                 if current_level.total_score > current_level.highscore_list[9]:
                     current_level.total_score += current_level.score
                     current_level.highscore_list[9] = current_level.total_score

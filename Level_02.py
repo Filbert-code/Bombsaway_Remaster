@@ -32,7 +32,6 @@ class Level_02(Level):
         self.total = None
 
         self.last_death = pygame.time.get_ticks()
-        self.lives = 3
         self.bg_ticks = pygame.time.get_ticks()
         self.last_bomb = pygame.time.get_ticks()
         self.last_bomb_anim = pygame.time.get_ticks()
