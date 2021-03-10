@@ -2,13 +2,18 @@ import random
 import pygame
 from os import path
 import animations
+import civilian
+import constants
 import explosions
 import menu
+import mob
 import player_module
 import mob_01_left, mob_01_right, mob_02_left, mob_02_right
 import mob_03_left,mob_03_right,mob_04_left, mob_04_right
 
 # Parent level class. Sharing level characteristics are initiated here
+import summary
+import text
 
 
 class Level:
@@ -38,6 +43,7 @@ class Level:
         self.load_data()
 
         self.lives = 50
+        self.bombs = 1
         self.number_of_spawns = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
 
     # load data from the highscore.txt file to get saved data
@@ -274,3 +280,29 @@ class Level:
             self.mobs.add(self.mob)
             self.mob_04_right_ticks = now
             self.number_of_spawns[7] += 1
+
+    def civilian_spawn(self, x, y, speedx, speedy, rotate):
+        civ_plane = civilian.Civilian_plane(x, y, speedx, speedy, rotate) #(x, y, speedx, speedy, rotate)
+        self.all_sprites.add(civ_plane)
+        self.civ_group.add(civ_plane)
+        self.civ_count += 1
+        self.civ_time = pygame.time.get_ticks() + 500
+
+    def civ_alert(self):
+        if len(self.civ_group.sprites()) > 0:
+            right_now = pygame.time.get_ticks()
+            if self.civ_time > right_now:
+                text.draw_text(self.screen, '!!Civilians Alert!!', 40, 675, 10, constants.RED, "Haettenschweiler")
+            else:
+                if right_now - self.civ_time > 500:
+                    self.civ_time += 1000
+
+    def shooting_mobs (self, mob_image, x, y, speedx, speedy, speed_mod, spawn_time):
+        now = pygame.time.get_ticks()
+        if now - self.mob_v2_time > spawn_time:
+            # speed mods: 1-slow oscillations 2-fast oscillations 3-linear movement
+            moby = mob.Mob(mob_image, x, y, speedx, speedy, speed_mod, (500, 4, 2000)) #(fire_rate, bullet_speed, delay)
+            self.all_sprites.add(moby)
+            self.mobs.add(moby)
+            self.mob_v2_time = now
+            summary.total_fighters += 1

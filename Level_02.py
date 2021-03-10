@@ -159,30 +159,6 @@ class Level_02(Level):
             self.all_sprites.add(new_power3)
             self.gun_powerups.add(new_power3)
 
-    def civilian_spawn(self, x, y, speedx, speedy, rotate):
-        civ_plane = civilian.Civilian_plane(x, y, speedx, speedy, rotate) #(x, y, speedx, speedy, rotate)
-        self.all_sprites.add(civ_plane)
-        self.civ_group.add(civ_plane)
-        self.civ_count += 1
-        self.civ_time = pygame.time.get_ticks() + 500
-
-    def civ_alert(self):
-        if len(self.civ_group.sprites()) > 0:
-            right_now = pygame.time.get_ticks()
-            if self.civ_time > right_now:
-                text.draw_text(self.screen, '!!Civilians Alert!!', 40, 675, 10, constants.RED, "Haettenschweiler")
-            else:
-                if right_now - self.civ_time > 500:
-                    self.civ_time += 1000
-
-    def shooting_mobs (self, mob_image, x, y, speedx, speedy, speed_mod, spawn_time):
-        now = pygame.time.get_ticks()
-        if now - self.mob_v2_time > spawn_time:
-            moby = mob.Mob(mob_image, x, y, speedx, speedy, speed_mod, (500, 4, 2000)) #(fire_rate, bullet_speed, delay)
-            self.all_sprites.add(moby)
-            self.mobs.add(moby)
-            self.mob_v2_time = now
-            summary.total_fighters += 1
 
     def mob_draw(self):
         if self.starting_pos > -7000:

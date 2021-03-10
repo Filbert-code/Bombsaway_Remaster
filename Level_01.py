@@ -24,7 +24,6 @@ class Level_01(Level):
         self.clock = clock
         ##############
         # Level-child attributes:
-        self.bombs = 1
         self.total = None
         self.bomb_frame = 20
         self.spawned_a_boss = 0
@@ -57,6 +56,8 @@ class Level_01(Level):
         self.mob_01_delay = pygame.time.get_ticks()
         self.mob_02_delay = pygame.time.get_ticks()
         self.laser_charge_time = pygame.time.get_ticks()
+        self.last_bomb = pygame.time.get_ticks()
+        self.last_bomb_anim = pygame.time.get_ticks()
 
         # Level Summary tracking information:
 
@@ -224,33 +225,6 @@ class Level_01(Level):
             self.all_sprites.add(new_power3)
             self.gun_powerups.add(new_power3)
 
-
-
-    def civilian_spawn(self, x, y, speedx, speedy, rotate):
-        civ_plane = civilian.Civilian_plane(x, y, speedx, speedy, rotate) #(x, y, speedx, speedy, rotate)
-        self.all_sprites.add(civ_plane)
-        self.civ_group.add(civ_plane)
-        self.civ_count += 1
-        self.civ_time = pygame.time.get_ticks() + 500
-
-    def civ_alert(self):
-        if len(self.civ_group.sprites()) > 0:
-            right_now = pygame.time.get_ticks()
-            if self.civ_time > right_now:
-                text.draw_text(self.screen, '!!Civilians Alert!!', 40, 675, 10, constants.RED, "Haettenschweiler")
-            else:
-                if right_now - self.civ_time > 500:
-                    self.civ_time += 1000
-
-    def shooting_mobs (self, mob_image, x, y, speedx, speedy, speed_mod, spawn_time):
-        now = pygame.time.get_ticks()
-        if now - self.mob_v2_time > spawn_time:
-            # speed mods: 1-slow oscillations 2-fast oscillations 3-linear movement
-            moby = mob.Mob(mob_image, x, y, speedx, speedy, speed_mod, (500, 4, 2000)) #(fire_rate, bullet_speed, delay)
-            self.all_sprites.add(moby)
-            self.mobs.add(moby)
-            self.mob_v2_time = now
-            summary.total_fighters += 1
 
     def mob_draw(self):
         if self.starting_pos > -6000 and self.civ_count < 1:
@@ -437,9 +411,8 @@ class Level_01(Level):
 
     def bomb_animation(self):
         now = pygame.time.get_ticks()
-        last_bomb_anim = self.start_time
-        if now - last_bomb_anim > 20:
-            last_bomb_anim = now
+        if now - self.last_bomb_anim > 20:
+            self.last_bomb_anim = now
             self.screen.blit(animations.bombsaway_anim[self.bomb_frame], \
             (self.player.rect.centerx-(self.bomb_frame+1)*50, self.player.rect.centery-(self.bomb_frame+1)*float(37.5)))
             self.bomb_frame += 1
@@ -448,11 +421,10 @@ class Level_01(Level):
         # Updates the bombs triggered by the self.player
         keystate = pygame.key.get_pressed()
         now = pygame.time.get_ticks()
-        last_bomb = self.start_time
-        if now - last_bomb > 200:
+        if now - self.last_bomb > 200:
             if keystate[pygame.K_b] and self.bombs > 0:
                 self.bombsaway()
-                last_bomb = now
+                self.last_bomb = now
                 self.bomb_frame = 0
                 self.bombs -= 1
                 # Change this so that the boss will lose health when bomb is triggered
