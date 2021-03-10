@@ -153,3 +153,12 @@ class Level:
             else:
                 self.exp2_sound.play()
             self.total_score -= 100000
+
+    def powerup_bomb(self):
+        powerup_sound = pygame.mixer.Sound('sounds/ammo_powerup1.wav')
+        powerup_sound.set_volume(0.3)
+        hits = pygame.sprite.spritecollide(self.player, self.bomb_powerups,\
+        True, pygame.sprite.collide_circle)
+        for every in hits:
+            self.bombs += 1
+            powerup_sound.play()

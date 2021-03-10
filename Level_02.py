@@ -88,7 +88,6 @@ class Level_02(Level):
         self.player_lives()
         self.civilian_planes()
         self.explosions()
-        self.powerup_ammo()
         self.powerup_bomb()
         self.powerup_speed()
         self.powerup_gun()
@@ -145,15 +144,6 @@ class Level_02(Level):
                 self.exp1_sound.play()
             else:
                 self.exp2_sound.play()
-
-    def powerup_ammo(self):
-        powerup_sound = pygame.mixer.Sound('sounds/ammo_powerup2.wav')
-        powerup_sound.set_volume(0.3)
-        hits = pygame.sprite.spritecollide(self.player, self.ammo_powerups,\
-        True, pygame.sprite.collide_circle)
-        for every in hits:
-            self.player.ammo += 20
-            powerup_sound.play()
 
     def powerup_bomb(self):
         powerup_sound = pygame.mixer.Sound('sounds/ammo_powerup1.wav')

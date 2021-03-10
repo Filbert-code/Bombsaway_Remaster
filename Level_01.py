@@ -44,14 +44,12 @@ class Level_01(Level):
         self.car_up_images()
         self.car_down_images()
 
+        self.start_time = pygame.time.get_ticks()
 
-
-        self.last_bomb = pygame.time.get_ticks()
-        self.last_bomb_anim = pygame.time.get_ticks()
-        self.mob_01_left_ticks = pygame.time.get_ticks()
-        self.mob_01_right_ticks = pygame.time.get_ticks()
-        self.mob_02_left_ticks = pygame.time.get_ticks()
-        self.mob_02_right_ticks = pygame.time.get_ticks()
+        # self.mob_01_left_ticks = pygame.time.get_ticks()
+        # self.mob_01_right_ticks = pygame.time.get_ticks()
+        # self.mob_02_left_ticks = pygame.time.get_ticks()
+        # self.mob_02_right_ticks = pygame.time.get_ticks()
         self.mob_03_left_ticks = pygame.time.get_ticks()
         self.mob_03_right_ticks = pygame.time.get_ticks()
         self.mob_04_left_ticks = pygame.time.get_ticks()
@@ -110,7 +108,6 @@ class Level_01(Level):
         self.explosions()
         self.down_cars_update()
         self.up_cars_update()
-        self.powerup_ammo()
         self.powerup_bomb()
         self.powerup_speed()
         self.powerup_gun()
@@ -209,23 +206,8 @@ class Level_01(Level):
             else:
                 self.exp2_sound.play()
 
-    def powerup_ammo(self):
-        powerup_sound = pygame.mixer.Sound('sounds/ammo_powerup2.wav')
-        powerup_sound.set_volume(0.3)
-        hits = pygame.sprite.spritecollide(self.player, self.ammo_powerups,\
-        True, pygame.sprite.collide_circle)
-        for every in hits:
-            self.player.ammo += 20
-            powerup_sound.play()
 
-    def powerup_bomb(self):
-        powerup_sound = pygame.mixer.Sound('sounds/ammo_powerup1.wav')
-        powerup_sound.set_volume(0.3)
-        hits = pygame.sprite.spritecollide(self.player, self.bomb_powerups,\
-        True, pygame.sprite.collide_circle)
-        for every in hits:
-            self.bombs += 1
-            powerup_sound.play()
+
 
     def powerup_speed(self):
         powerup_sound = pygame.mixer.Sound('sounds/ammo_powerup1.wav')
@@ -265,6 +247,8 @@ class Level_01(Level):
             self.gun_powerups.add(new_power3)
 
     def mob_spawn_01_left(self):
+        if self.number_of_spawns[0] == 0:
+            self.mob_01_left_ticks = self.start_time
         now = pygame.time.get_ticks()
         if now - self.mob_01_left_ticks > 750 and self.number_of_spawns[0] < 7:
             self.mob = mob_01_left.Mob_01_left(-30, 400, (300, 4, 2000))
@@ -274,8 +258,8 @@ class Level_01(Level):
             self.number_of_spawns[0] += 1
 
     def mob_spawn_01_right(self):
-        # right_now = pygame.time.get_ticks()
-        # if right_now - self.mob_01_delay > 750:
+        if self.number_of_spawns[1] == 0:
+            self.mob_01_right_ticks = self.start_time
         now = pygame.time.get_ticks()
         if now - self.mob_01_right_ticks > 750 and self.number_of_spawns[1] < 7:
             self.mob = mob_01_right.Mob_01_right(830, 400, (300, 4, 2000)) #(fire_rate, bullet_speed, delay)
@@ -285,17 +269,22 @@ class Level_01(Level):
             self.number_of_spawns[1] += 1
 
     def mob_spawn_02_left(self):
-            now = pygame.time.get_ticks()
-            if now - self.mob_02_left_ticks > 750 and self.number_of_spawns[2] < 7:
-                self.mob = mob_02_left.Mob_02_left(-30, 510, (300, 4, 2000)) #(fire_rate, bullet_speed, delay)
-                self.all_sprites.add(self.mob)
-                self.mobs.add(self.mob)
-                self.mob_02_left_ticks = now
-                self.number_of_spawns[2] += 1
+        if self.number_of_spawns[2] == 0:
+            self.mob_02_left_ticks = self.start_time
+        now = pygame.time.get_ticks()
+        # self.mob_02_left_ticks = self.start_time
+        if now - self.mob_02_left_ticks > 750 and self.number_of_spawns[2] < 7:
+            self.mob = mob_02_left.Mob_02_left(-30, 510, (300, 4, 2000)) #(fire_rate, bullet_speed, delay)
+            self.all_sprites.add(self.mob)
+            self.mobs.add(self.mob)
+            self.mob_02_left_ticks = now
+            self.number_of_spawns[2] += 1
 
     def mob_spawn_02_right(self):
         # right_now = pygame.time.get_ticks()
         # if right_now - self.mob_02_delay > 750:
+        if self.number_of_spawns[3] == 0:
+            self.mob_02_right_ticks = self.start_time
         now = pygame.time.get_ticks()
         if now - self.mob_02_right_ticks > 750 and self.number_of_spawns[3] < 7:
             self.mob = mob_02_right.Mob_02_right(830, 510, (300, 4, 2000)) #(fire_rate, bullet_speed, delay)
@@ -305,6 +294,8 @@ class Level_01(Level):
             self.number_of_spawns[3] += 1
 
     def mob_spawn_03_left(self):
+        if self.number_of_spawns[4] == 0:
+            self.mob_03_left_ticks = self.start_time
         now = pygame.time.get_ticks()
         if now - self.mob_03_left_ticks > 750 and self.number_of_spawns[4] < 7:
             self.mob = mob_03_left.Mob_03_left(-30, 500, (300, 4, 2000)) #(fire_rate, bullet_speed, delay)
@@ -314,6 +305,8 @@ class Level_01(Level):
             self.number_of_spawns[4] += 1
 
     def mob_spawn_03_right(self):
+        if self.number_of_spawns[5] == 0:
+            self.mob_03_right_ticks = self.start_time
         now = pygame.time.get_ticks()
         if now - self.mob_03_right_ticks > 750 and self.number_of_spawns[5] < 7:
             self.mob = mob_03_right.Mob_03_right(830, 500, (300, 4, 2000)) #(fire_rate, bullet_speed, delay)
@@ -323,6 +316,8 @@ class Level_01(Level):
             self.number_of_spawns[5] += 1
 
     def mob_spawn_04_left(self):
+        if self.number_of_spawns[6] == 0:
+            self.mob_04_left_ticks = self.start_time
         now = pygame.time.get_ticks()
         if now - self.mob_04_left_ticks > 750 and self.number_of_spawns[6] < 4:
             self.mob = mob_04_left.Mob_04_left(-30, 510, (300, 4, 2000)) #(fire_rate, bullet_speed, delay)
@@ -332,6 +327,8 @@ class Level_01(Level):
             self.number_of_spawns[6] += 1
 
     def mob_spawn_04_right(self):
+        if self.number_of_spawns[7] == 0:
+            self.mob_04_right_ticks = self.start_time
         now = pygame.time.get_ticks()
         if now - self.mob_04_right_ticks > 750 and self.number_of_spawns[7] < 4:
             self.mob = mob_04_right.Mob_04_right(830, 510, (300, 4, 2000)) #(fire_rate, bullet_speed, delay)
@@ -551,8 +548,9 @@ class Level_01(Level):
 
     def bomb_animation(self):
         now = pygame.time.get_ticks()
-        if now - self.last_bomb_anim > 20:
-            self.last_bomb_anim = now
+        last_bomb_anim = self.start_time
+        if now - last_bomb_anim > 20:
+            last_bomb_anim = now
             self.screen.blit(animations.bombsaway_anim[self.bomb_frame], \
             (self.player.rect.centerx-(self.bomb_frame+1)*50, self.player.rect.centery-(self.bomb_frame+1)*float(37.5)))
             self.bomb_frame += 1
@@ -561,10 +559,11 @@ class Level_01(Level):
         # Updates the bombs triggered by the self.player
         keystate = pygame.key.get_pressed()
         now = pygame.time.get_ticks()
-        if now - self.last_bomb > 200:
+        last_bomb = self.start_time
+        if now - last_bomb > 200:
             if keystate[pygame.K_b] and self.bombs > 0:
                 self.bombsaway()
-                self.last_bomb = now
+                last_bomb = now
                 self.bomb_frame = 0
                 self.bombs -= 1
                 # Change this so that the boss will lose health when bomb is triggered
