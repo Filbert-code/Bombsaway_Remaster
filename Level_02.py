@@ -101,7 +101,7 @@ class Level_02(Level):
 
     def draw(self):
         self.tank_spawn(-3200, -1800)
-        self.heli_spawn()
+        self.heli_spawn([-4500], [[-50, 100, 1, 0]])
         self.mob_draw()
         self.civ_alert()
         self.laser_meter()
@@ -186,27 +186,7 @@ class Level_02(Level):
             self.shooting_mobs(0, -30, 100, 2, 0, 1, 1000)
 
 
-    def heli_spawn(self):
-        if self.starting_pos > -4500:
-            if self.got_a_heli == 0:
-                heli_1 = helicopter.Helicopter(-50, 100, 1, 0)
-                self.all_sprites.add(heli_1)
-                self.helicopters.add(heli_1)
-                self.got_a_heli += 1
-                self.heli_life = 20
-            if self.got_a_heli == 1:
-                self.mob_bullets.add(helicopter.bullets)
-                self.all_sprites.add(helicopter.bullets)
-                hits = pygame.sprite.groupcollide(self.helicopters, self.bullets, False, True)
-                for every in hits:
-                    self.heli_life -= 1
-                if self.heli_life < 0 and len(self.helicopters) > 0:
-                    self.charge += 30
-                    self.score += 100000
-                    self.total_helicopters_killed += 1
-                    expl = explosions.Explosion(self.helicopters.sprites()[0].rect.center, 'sm')
-                    self.all_sprites.add(expl)
-                    self.helicopters.sprites()[0].kill()
+
 
     def boss_spawn(self):
         if self.total == 0 and len(self.mobs) == 0 and self.spawned_a_boss == 0:

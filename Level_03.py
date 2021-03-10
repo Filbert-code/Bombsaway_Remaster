@@ -101,7 +101,7 @@ class Level_03(Level):
 
     def draw(self):
         self.tank_spawn(-3200, -1800)
-        self.heli_spawn()
+        self.heli_spawn([-4000, -1500],[[-50, 100, 1, 0], [850, 100, -1, 0]])
         self.mob_draw()
         self.civ_alert()
         self.laser_meter()

@@ -5,6 +5,7 @@ import animations
 import civilian
 import constants
 import explosions
+import helicopter
 import menu
 import mob
 import player_module
@@ -366,3 +367,27 @@ class Level:
                     self.tank_02.kill()
                     self.tank_02_body.kill()
                     self.tank_life -= 1
+
+    def heli_spawn(self, spawn_pos_list, heli_attributes):
+        for heli_num, ind in enumerate(spawn_pos_list):
+            if self.starting_pos > spawn_pos_list[ind]:
+                if self.got_a_heli == 0:
+                    # NEED TO CHANGE TO heli_2...heli_3...depending on number of helicopters
+                    heli_1 = helicopter.Helicopter(heli_attributes[0], heli_attributes[1], heli_attributes[2], heli_attributes[3])
+                    self.all_sprites.add(heli_1)
+                    self.helicopters.add(heli_1)
+                    self.got_a_heli += 1
+                    self.heli_life = 20
+                if self.got_a_heli == heli_num:
+                    self.mob_bullets.add(helicopter.bullets)
+                    self.all_sprites.add(helicopter.bullets)
+                    hits = pygame.sprite.groupcollide(self.helicopters, self.bullets, False, True)
+                    for every in hits:
+                        self.heli_life -= 1
+                    if self.heli_life < 0 and len(self.helicopters) > 0:
+                        self.charge += 30
+                        self.score += 100000
+                        self.total_helicopters_killed += 1
+                        expl = explosions.Explosion(self.helicopters.sprites()[0].rect.center, 'sm')
+                        self.all_sprites.add(expl)
+                        self.helicopters.sprites()[0].kill()
