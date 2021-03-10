@@ -414,3 +414,40 @@ class Level:
                         expl = explosions.Explosion(self.helicopters.sprites()[0].rect.center, 'sm')
                         self.all_sprites.add(expl)
                         self.helicopters.sprites()[0].kill()
+
+    def paused(self):
+        text.draw_text(self.screen, "Paused", 200, 400, 120, constants.BLUE, "ariel")
+        text.draw_text(self.screen, "Press [p] key to UNPAUSE", 50, 400, 250, constants.BLUE, "ariel")
+        text.draw_text(self.screen, "Press [ESC] key to EXIT GAME", 50, 400, 300, constants.BLUE, "ariel")
+        # button_sprites = pygame.sprite.Group()
+        # images = ['sprites/enemyBlack1.png', 'sprites/enemyBlue1.png']
+        # continue_button = button.Button(images, 300, 600)
+        # button_sprites.add(continue_button)
+        pause = True
+        # The key press code for pause is in the self.player_module
+        while pause:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_p:
+                        pause = False
+                        self.player.pause = False
+                    if event.key == pygame.K_ESCAPE:
+                        Level.running = False
+                        pause = False
+                        self.player.pause = False
+            pygame.display.update()
+            self.clock.tick(15)
+
+    def draw_hud(self):
+        text.draw_text(self.screen, str(self.total_score + self.score), 50, constants.WIDTH/2 + 10 , 10, constants.SCORE_RED, "Haettenschweiler") #(surf, text, size, x, y, color, font name)
+        # text.draw_text(self.screen, 'AMMO: ' + str(self.player.ammo), 30, constants.WIDTH - 70, constants.HEIGHT - 120, constants.BLACK, "Haettenschweiler")
+        text.draw_text(self.screen, 'BOMBS: ' + str(self.bombs), 20, 140, 497, constants.RED, "Haettenschweiler")
+        text.draw_text(self.screen, 'Time: ' + str(round(summary.time/1000)), 20, 140, 470, constants.RED, "Haettenschweiler")
+        text.draw_text(self.screen, 'LIVES: ' + str(self.lives), 30, 50, 10, constants.GREEN, "Haettenschweiler")
+        text.draw_text(self.screen, '25%', 20, 65, 555, constants.DARK_GREEN, "Haettenschweiler")
+        text.draw_text(self.screen, '50%', 20, 115, 555, constants.DARK_GREEN, "Haettenschweiler")
+        text.draw_text(self.screen, '75%', 20, 162, 555, constants.DARK_GREEN, "Haettenschweiler")
+        text.draw_text(self.screen, '100%', 20, 212, 555, constants.DARK_GREEN, "Haettenschweiler")

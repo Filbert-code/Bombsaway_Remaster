@@ -336,36 +336,6 @@ class Level_02(Level):
         text.draw_text(self.screen, 'HEALTH: ', 24, 100, 7, constants.BLACK, "ariel")
         self.screen.blit(image, (135, 5))
 
-    def paused(self):
-        text.draw_text(self.screen, "Paused", 200, 400, 120, constants.BLUE, "ariel")
-        text.draw_text(self.screen, "Press [p] key to UNPAUSE", 50, 400, 250, constants.BLUE, "ariel")
-        text.draw_text(self.screen, "Press [ESC] key to EXIT GAME", 50, 400, 300, constants.BLUE, "ariel")
-        # button_sprites = pygame.sprite.Group()
-        # images = ['sprites/enemyBlack1.png', 'sprites/enemyBlue1.png']
-        # continue_button = button.Button(images, 300, 600)
-        # button_sprites.add(continue_button)
-        pause = True
-        # The key press code for pause is in the player_module
-        while pause:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_p:
-                        pause = False
-                        self.player.pause = False
-                    if event.key == pygame.K_ESCAPE:
-                        Level.running = False
-                        pause = False
-                        self.player.pause = False
-            # button_sprites.update()
-            # button_sprites.draw(self.screen)
-            # if continue_button.function == 1:
-            #     self.draw_one()
-            pygame.display.update()
-            self.clock.tick(15)
-
     def level_summary(self):
         spawns = 0
         for i in range(8):
@@ -398,14 +368,3 @@ class Level_02(Level):
         tank.player_position = [self.player.rect.centerx, self.player.rect.centery]
         helicopter.player_position = [self.player.rect.centerx, self.player.rect.centery]
         boss_2.player_position = [self.player.rect.centerx, self.player.rect.centery]
-
-    def draw_hud(self):
-        text.draw_text(self.screen, str(self.total_score + self.score), 50, constants.WIDTH/2 + 10 , 10, constants.SCORE_RED, "Haettenschweiler") #(surf, text, size, x, y, color, font name)
-        # text.draw_text(self.screen, 'AMMO: ' + str(player.ammo), 30, constants.WIDTH - 70, constants.HEIGHT - 120, constants.BLACK, "Haettenschweiler")
-        text.draw_text(self.screen, 'BOMBS: ' + str(self.bombs), 20, 140, 497, constants.RED, "Haettenschweiler")
-        text.draw_text(self.screen, 'Time: ' + str(round(summary.time/1000)), 20, 140, 470, constants.RED, "Haettenschweiler")
-        text.draw_text(self.screen, 'LIVES: ' + str(self.lives), 30, 50, 10, constants.GREEN, "Haettenschweiler")
-        text.draw_text(self.screen, '25%', 20, 65, 555, constants.DARK_GREEN, "Haettenschweiler")
-        text.draw_text(self.screen, '50%', 20, 115, 555, constants.DARK_GREEN, "Haettenschweiler")
-        text.draw_text(self.screen, '75%', 20, 162, 555, constants.DARK_GREEN, "Haettenschweiler")
-        text.draw_text(self.screen, '100%', 20, 212, 555, constants.DARK_GREEN, "Haettenschweiler")
