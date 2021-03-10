@@ -57,14 +57,14 @@ if __name__ == "__main__":
                     current_level.level_summary()
                     current_level.total_score += current_level.score
                     current_level.new_level()
-                    current_level_no += 1
                     player = player_module.Player()
-                    if current_level_no == 2:
-                        current_level = Level_03(player)
-                    elif current_level_no == 1:
-                        current_level = Level_02(player)
+                    if current_level_no == 1:
+                        current_level = Level_02(player, screen, clock)
+                    elif current_level_no == 2:
+                        current_level = Level_03(player, screen, clock)
                     current_level.all_sprites.add(current_level.player)
                     pygame.mixer.music.play(loops = -1)
+                    current_level_no += 1
 
             if len(current_level.boss_sprite) == 0 and current_level_no == 3:
                 current_level.level_summary()
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
         current_level.update()
         # updates the background position to create the scrolling affect
-        current_level.starting_pos += 2
+        current_level.starting_pos += 25
         current_level.total = current_level.starting_pos
         if current_level.total > current_level.starting_pos*-1:
             current_level.total = 0
