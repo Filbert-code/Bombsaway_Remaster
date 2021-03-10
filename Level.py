@@ -13,6 +13,7 @@ import mob_03_left,mob_03_right,mob_04_left, mob_04_right
 
 # Parent level class. Sharing level characteristics are initiated here
 import summary
+import tank
 import text
 
 
@@ -42,9 +43,14 @@ class Level:
         self.highscore_list = []
         self.load_data()
 
+        # need to be reset after each level
         self.lives = 50
         self.bombs = 1
         self.number_of_spawns = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
+        self.starting_pos = -7080
+        self.got_a_tank = 0
+        self.total_tanks_killed = 0
+        self.tank_life = 5
 
     # load data from the highscore.txt file to get saved data
     def load_data(self):
@@ -306,3 +312,57 @@ class Level:
             self.mobs.add(moby)
             self.mob_v2_time = now
             summary.total_fighters += 1
+
+    def tank_spawn(self, starting_pos_1, starting_pos_2):
+        # As of right now, only 1 tank can be on the self.screen at a time.
+        if self.starting_pos > starting_pos_1:
+            if self.got_a_tank == 0:
+                self.tank_01 = tank.Tank(300, -50)
+                self.tank_01_body = tank.Tank_body(300, -50)
+                self.all_sprites.add(self.tank_01_body)
+                self.tanks.add(self.tank_01_body)
+                self.all_sprites.add(self.tank_01)
+                self.tanks.add(self.tank_01)
+                self.got_a_tank += 1
+                self.tank_life = 5
+            if self.got_a_tank == 1:
+                self.mob_bullets.add(tank.bullets)
+                self.all_sprites.add(tank.bullets)
+                hits = pygame.sprite.groupcollide(self.tanks, self.bullets, False, True)
+                for every in hits:
+                    self.tank_life -= 1
+                if self.tank_life < 0 and len(self.tanks) > 0:
+                    self.charge +=  10
+                    self.score += 25000
+                    self.total_tanks_killed += 1
+                    expl = explosions.Explosion(self.tanks.sprites()[0].rect.center, 'sm')
+                    self.all_sprites.add(expl)
+                    self.tank_01.kill()
+                    self.tank_01_body.kill()
+                    self.tank_life -= 1
+
+        if self.starting_pos > starting_pos_2:
+            if self.got_a_tank == 1:
+                self.tank_02 = tank.Tank(600, -50)
+                self.tank_02_body = tank.Tank_body(600, -50)
+                self.all_sprites.add(self.tank_02_body)
+                self.tanks.add(self.tank_02_body)
+                self.all_sprites.add(self.tank_02)
+                self.tanks.add(self.tank_02)
+                self.got_a_tank += 1
+                self.tank_life = 5
+            if self.got_a_tank == 2:
+                self.mob_bullets.add(tank.bullets)
+                self.all_sprites.add(tank.bullets)
+                hits = pygame.sprite.groupcollide(self.tanks, self.bullets, False, True)
+                for every in hits:
+                    self.tank_life -= 1
+                if self.tank_life < 0 and len(self.tanks) > 0:
+                    self.charge += 10
+                    self.score += 25000
+                    self.total_tanks_killed += 1
+                    expl = explosions.Explosion(self.tanks.sprites()[0].rect.center, 'sm')
+                    self.all_sprites.add(expl)
+                    self.tank_02.kill()
+                    self.tank_02_body.kill()
+                    self.tank_life -= 1

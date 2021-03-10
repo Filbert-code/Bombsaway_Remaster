@@ -17,7 +17,6 @@ class Level_03(Level):
         self.background = pygame.image.load('backgrounds/level_3_bg.jpg').convert()
         pygame.mixer.music.load('sounds/chiptunes_level_3.wav')
         pygame.mixer.music.set_volume(0.55)
-        self.starting_pos = -7080
         self.player = player
         self.screen = screen
         self.clock = clock
@@ -50,12 +49,9 @@ class Level_03(Level):
         self.total_fighters = 0
         self.total_helicopters_killed = 0
         self.total_helicopters = 0
-        self.total_tanks_killed = 0
         self.total_tanks = 0
 
-        self.got_a_tank = 0
         self.number_of_tank_hits = 0
-        self.tank_life = 5
         self.got_a_heli = 0
         self.number_of_heli_hits = 0
         self.heli_life = 20
@@ -104,7 +100,7 @@ class Level_03(Level):
             self.player.upgrade += 2
 
     def draw(self):
-        self.tank_spawn()
+        self.tank_spawn(-3200, -1800)
         self.heli_spawn()
         self.mob_draw()
         self.civ_alert()
@@ -186,62 +182,6 @@ class Level_03(Level):
         if -500 > self.starting_pos > -1500:
             self.shooting_mobs(0, -30, 100, -3, 0, 3, 1000)
             self.shooting_mobs(2, 830, 350, 4, 1, 2, 1500)
-
-
-
-    def tank_spawn(self):
-        # As of right now, only 1 tank can be on the self.screen at a time.
-        if self.starting_pos > -3200:
-            if self.got_a_tank == 0:
-                self.tank_01 = tank.Tank(400, -50)
-                self.tank_01_body = tank.Tank_body(400, -50)
-                self.all_sprites.add(self.tank_01_body)
-                self.tanks.add(self.tank_01_body)
-                self.all_sprites.add(self.tank_01)
-                self.tanks.add(self.tank_01)
-                self.got_a_tank += 1
-                self.tank_life = 5
-            if self.got_a_tank == 1:
-                self.mob_bullets.add(tank.bullets)
-                self.all_sprites.add(tank.bullets)
-                hits = pygame.sprite.groupcollide(self.tanks, self.bullets, False, True)
-                for every in hits:
-                    self.tank_life -= 1
-                if self.tank_life < 0 and len(self.tanks) > 0:
-                    self.charge += 10
-                    self.score += 25000
-                    self.total_tanks_killed += 1
-                    expl = explosions.Explosion(self.tanks.sprites()[0].rect.center, 'sm')
-                    self.all_sprites.add(expl)
-                    self.tank_01.kill()
-                    self.tank_01_body.kill()
-                    self.tank_life -= 1
-
-        if self.starting_pos > -1800:
-            if self.got_a_tank == 1:
-                self.tank_02 = tank.Tank(500, -50)
-                self.tank_02_body = tank.Tank_body(500, -50)
-                self.all_sprites.add(self.tank_02_body)
-                self.tanks.add(self.tank_02_body)
-                self.all_sprites.add(self.tank_02)
-                self.tanks.add(self.tank_02)
-                self.got_a_tank += 1
-                self.tank_life = 5
-            if self.got_a_tank == 2:
-                self.mob_bullets.add(tank.bullets)
-                self.all_sprites.add(tank.bullets)
-                hits = pygame.sprite.groupcollide(self.tanks, self.bullets, False, True)
-                for every in hits:
-                    self.tank_life -= 1
-                if self.tank_life < 0 and len(self.tanks) > 0:
-                    self.charge += 10
-                    self.score += 25000
-                    self.total_tanks_killed += 1
-                    expl = explosions.Explosion(self.tanks.sprites()[0].rect.center, 'sm')
-                    self.all_sprites.add(expl)
-                    self.tank_02.kill()
-                    self.tank_02_body.kill()
-                    self.tank_life -= 1
 
     def heli_spawn(self):
         if self.starting_pos > -4000:
