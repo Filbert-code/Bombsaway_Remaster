@@ -52,6 +52,7 @@ class Level:
         self.total_helicopters_killed = 0
         self.total_helicopters = 0
         self.total_tanks = 0
+        self.bomb_frame = 20
 
         # need to be reset after each level
         self.start_time = pygame.time.get_ticks()
@@ -71,6 +72,7 @@ class Level:
         self.blink_delay = pygame.time.get_ticks()
         self.meter_emptying = pygame.time.get_ticks()
         self.laser_charge_time = pygame.time.get_ticks()
+        self.last_bomb = pygame.time.get_ticks()
 
 
 
@@ -216,6 +218,20 @@ class Level:
                 self.exp1_sound.play()
             else:
                 self.exp2_sound.play()
+
+    def bomb_update(self):
+        # Updates the bombs triggered by the self.player
+        keystate = pygame.key.get_pressed()
+        now = pygame.time.get_ticks()
+        if now - self.last_bomb > 200:
+            if keystate[pygame.K_b] and self.bombs > 0:
+                self.bombsaway()
+                self.last_bomb = now
+                self.bomb_frame = 0
+                self.bombs -= 1
+                # Change this so that the boss will lose health when bomb is triggered
+                if self.spawned_a_boss == 1:
+                    self.boss.life -= 20
 
     def powerup_speed(self):
         powerup_sound = pygame.mixer.Sound('sounds/ammo_powerup1.wav')

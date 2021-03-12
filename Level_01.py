@@ -25,7 +25,7 @@ class Level_01(Level):
         ##############
         # Level-child attributes:
         self.total = None
-        self.bomb_frame = 20
+
 
         self.spawn_powerups()
 
@@ -47,7 +47,7 @@ class Level_01(Level):
         self.mob_01_delay = pygame.time.get_ticks()
         self.mob_02_delay = pygame.time.get_ticks()
         self.laser_charge_time = pygame.time.get_ticks()
-        self.last_bomb = pygame.time.get_ticks()
+
         self.last_bomb_anim = pygame.time.get_ticks()
 
         # Level Summary tracking information:
@@ -244,19 +244,7 @@ class Level_01(Level):
             (self.player.rect.centerx-(self.bomb_frame+1)*50, self.player.rect.centery-(self.bomb_frame+1)*float(37.5)))
             self.bomb_frame += 1
 
-    def bomb_update(self):
-        # Updates the bombs triggered by the self.player
-        keystate = pygame.key.get_pressed()
-        now = pygame.time.get_ticks()
-        if now - self.last_bomb > 200:
-            if keystate[pygame.K_b] and self.bombs > 0:
-                self.bombsaway()
-                self.last_bomb = now
-                self.bomb_frame = 0
-                self.bombs -= 1
-                # Change this so that the boss will lose health when bomb is triggered
-                if self.spawned_a_boss == 1:
-                     self.boss.life -= 20
+
 
     def boss_damage(self):
         if self.spawned_a_boss == 1:
