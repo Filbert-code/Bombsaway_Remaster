@@ -193,6 +193,27 @@ class Level:
                 self.exp2_sound.play()
             self.total_score -= 100000
 
+    def explosions(self):
+        self.exp1_sound = pygame.mixer.Sound('sounds/Explosion1.wav')
+        self.exp1_sound.set_volume(0.3)
+        self.exp2_sound = pygame.mixer.Sound('sounds/Explosion2.wav')
+        self.exp2_sound.set_volume(0.3)
+        mob_hits = pygame.sprite.groupcollide(self.mobs, self.bullets, \
+        True, True, pygame.sprite.collide_circle)
+        for every in mob_hits:
+            self.total_fighters_killed += 1
+            self.charge += 3
+            if self.charge > 162:
+                self.charge = 163
+            self.score += 5000
+            expl = explosions.Explosion(every.rect.center, 'sm')
+            self.all_sprites.add(expl)
+            explode = random.randrange(2)
+            if explode == 1:
+                self.exp1_sound.play()
+            else:
+                self.exp2_sound.play()
+
     def powerup_bomb(self):
         powerup_sound = pygame.mixer.Sound('sounds/ammo_powerup1.wav')
         powerup_sound.set_volume(0.3)

@@ -108,28 +108,6 @@ class Level_03(Level):
         if self.spawned_a_boss > 0 and self.boss.new_sequence > 0:
             self.health_bar()
 
-    def explosions(self):
-        self.exp1_sound = pygame.mixer.Sound('sounds/Explosion1.wav')
-        self.exp1_sound.set_volume(0.3)
-        self.exp2_sound = pygame.mixer.Sound('sounds/Explosion2.wav')
-        self.exp2_sound.set_volume(0.3)
-        mob_hits = pygame.sprite.groupcollide(self.mobs, self.bullets, \
-        True, True, pygame.sprite.collide_circle)
-        for every in mob_hits:
-            if self.spawned_a_boss == 0:
-                self.total_fighters_killed += 1
-            self.charge += 3
-            if self.charge > 162:
-                self.charge = 163
-            if self.spawned_a_boss == 0:
-                self.score += 5000
-            expl = explosions.Explosion(every.rect.center, 'sm')
-            self.all_sprites.add(expl)
-            explode = random.randrange(2)
-            if explode == 1:
-                self.exp1_sound.play()
-            else:
-                self.exp2_sound.play()
 
     def spawn_powerups(self):
         # for i in range(12):
