@@ -32,37 +32,19 @@ class Level_02(Level):
 
         self.last_bomb = pygame.time.get_ticks()
         self.last_bomb_anim = pygame.time.get_ticks()
-        self.mob_01_left_ticks = pygame.time.get_ticks()
-        self.mob_01_right_ticks = pygame.time.get_ticks()
-        self.mob_02_left_ticks = pygame.time.get_ticks()
-        self.mob_02_right_ticks = pygame.time.get_ticks()
-        self.mob_03_left_ticks = pygame.time.get_ticks()
-        self.mob_03_right_ticks = pygame.time.get_ticks()
-        self.mob_04_left_ticks = pygame.time.get_ticks()
-        self.mob_04_right_ticks = pygame.time.get_ticks()
         self.mob_01_delay = pygame.time.get_ticks()
         self.mob_02_delay = pygame.time.get_ticks()
-        self.laser_charge_time = pygame.time.get_ticks()
-        # Level Summary tracking information:
-        self.number_of_spawns = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0}
-        self.total_fighters_killed = 0
-        self.total_fighters = 0
-        self.total_helicopters_killed = 0
-        self.total_helicopters = 0
-        self.total_tanks = 0
+
 
         self.number_of_tank_hits = 0
         self.tank_life = 5
-        self.got_a_heli = 0
         self.number_of_heli_hits = 0
         self.heli_life = 20
         self.mob_v2_time = pygame.time.get_ticks()
-        self.charge = 0
+
         self.civ_count = 0
         self.laser_start_pos = self.starting_pos
-        self.laser_time = pygame.time.get_ticks()
-        self.blink_delay = pygame.time.get_ticks()
-        self.meter_emptying = pygame.time.get_ticks()
+
         self.laser_sound_mix = 0
         self.last_portal_anim = pygame.time.get_ticks()
         self.portal_frame = 0
@@ -195,90 +177,6 @@ class Level_02(Level):
             self.boss_sprite.add(self.boss)
             self.spawned_a_boss = 1
 
-    def laser_kill(self):
-        if len(self.laser_group.sprites()) > 0:
-            mob_hits = pygame.sprite.groupcollide(self.mobs, self.laser_group, True, False)
-            for every in mob_hits:
-                self.total_fighters_killed += 1
-                self.score += 5000
-                expl = explosions.Explosion(every.rect.center, 'sm')
-                self.all_sprites.add(expl)
-                explode = random.randrange(2)
-                if explode == 1:
-                    self.exp1_sound.play()
-                else:
-                    self.exp2_sound.play()
-            tank_hits = pygame.sprite.groupcollide(self.tanks, self.laser_group, False, False)
-            for every in tank_hits:
-                self.tank_life -= 0.05
-                # expl = explosions.Explosion((every.rect.centerx, every.rect.bottom), 'sm')
-                # self.all_sprites.add(expl)
-
-            heli_hits = pygame.sprite.groupcollide(self.helicopters, self.laser_group, False, False)
-            for every in heli_hits:
-                # self.total_fighters_killed += 1
-                # self.score += 5000
-                self.heli_life -= 0.05
-                # expl = explosions.Explosion(every.rect.center, 'sm')
-                # self.all_sprites.add(expl)
-                # explode = random.randrange(2)
-                # if explode == 1:
-                #     self.exp1_sound.play()
-                # else:
-                #     self.exp2_sound.play()
-            mob_bullet_hits = pygame.sprite.groupcollide(self.mob_bullets, self.laser_group, True, False)
-
-            if self.spawned_a_boss == 1:
-                boss_hits = pygame.sprite.groupcollide(self.boss_sprite, self.laser_group, False, False)
-                for every in boss_hits:
-                    self.boss.life -= 0.25
-
-    def laser_meter(self):
-        self.laser_sound = pygame.mixer.Sound('sounds/laser_beam_1.wav')
-        self.laser_sound.set_volume(1)
-        right_now = pygame.time.get_ticks()
-        if self.player.firing_laser == False:
-            self.laser_time = right_now
-        if self.player.laser_ready == True and self.player.firing_laser == True:
-            if right_now - self.laser_time > 5000:
-                self.player.laser_ready = False
-                self.player.firing_laser = False
-                self.charge = 0
-
-        now = pygame.time.get_ticks()
-        if now - self.laser_charge_time > 1000:
-            self.charge += 2
-            self.laser_charge_time = now
-        if self.charge > 162:
-            self.player.laser_ready = True
-            self.charge = 163
-        self.screen.blit(animations.laser_meter_images[round(self.charge)], (10, 455))
-        # Laser-ready blinking code
-        if self.charge < 163:
-            self.blink_delay = pygame.time.get_ticks() + 1000
-        if self.charge == 163:
-            just_now = pygame.time.get_ticks()
-            if self.blink_delay > just_now:
-                text.draw_text(self.screen, 'LASER CHARGED', 20, 140, 522, constants.GREEN, "Haettenschweiler")
-            else:
-                if just_now - self.blink_delay > 1000:
-                    self.blink_delay += 2000
-        # Laser firing causes meter to empty
-        if self.player.firing_laser == True:
-            if self.laser_sound_mix == 0:
-                self.laser_sound.play(loops = 0)
-                self.laser_sound_mix += 1
-            now = pygame.time.get_ticks()
-            if now - self.meter_emptying > 50:
-                self.charge -= 1.8
-                self.meter_emptying = now
-        if self.player.laser_not_ready == False:
-            self.laser_not_ready = right_now + 2000
-        if self.player.laser_not_ready == True:
-            if self.laser_not_ready > right_now:
-                text.draw_text(self.screen, 'LASER NOT CHARGED', 20, 140, 522, constants.RED, "Haettenschweiler")
-            else:
-                self.player.laser_not_ready = False
 
     def bomb_animation(self):
         now = pygame.time.get_ticks()

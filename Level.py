@@ -63,6 +63,14 @@ class Level:
         self.tank_life = 5
         self.heli_num = 0
         self.heli_life = 20
+        self.boss = None
+        self.spawned_a_boss = 0
+        self.charge = 0
+
+        self.laser_time = pygame.time.get_ticks()
+        self.blink_delay = pygame.time.get_ticks()
+        self.meter_emptying = pygame.time.get_ticks()
+        self.laser_charge_time = pygame.time.get_ticks()
 
 
 
@@ -459,6 +467,53 @@ class Level:
                 boss_hits = pygame.sprite.groupcollide(self.boss_sprite, self.laser_group, False, False)
                 for every in boss_hits:
                     self.boss.life -= 0.25
+
+    def laser_meter(self):
+        self.laser_sound = pygame.mixer.Sound('sounds/laser_beam_1.wav')
+        self.laser_sound.set_volume(1)
+        right_now = pygame.time.get_ticks()
+        if not self.player.firing_laser:
+            self.laser_time = right_now
+        if self.player.laser_ready and self.player.firing_laser:
+            if right_now - self.laser_time > 5000:
+                self.player.laser_ready = False
+                self.player.firing_laser = False
+                self.charge = 0
+
+        now = pygame.time.get_ticks()
+        if now - self.laser_charge_time > 1000:
+            self.charge += 2
+            self.laser_charge_time = now
+        if self.charge > 162:
+            self.player.laser_ready = True
+            self.charge = 163
+        self.screen.blit(animations.laser_meter_images[round(self.charge)], (10, 455))
+        # Laser-ready blinking code
+        if self.charge < 163:
+            self.blink_delay = pygame.time.get_ticks() + 1000
+        if self.charge == 163:
+            just_now = pygame.time.get_ticks()
+            if self.blink_delay > just_now:
+                text.draw_text(self.screen, 'LASER CHARGED', 20, 140, 522, constants.GREEN, "Haettenschweiler")
+            else:
+                if just_now - self.blink_delay > 1000:
+                    self.blink_delay += 2000
+        # Laser firing causes meter to empty
+        if self.player.firing_laser:
+            if self.laser_sound_mix == 0:
+                self.laser_sound.play(loops = 0)
+                self.laser_sound_mix += 1
+            now = pygame.time.get_ticks()
+            if now - self.meter_emptying > 50:
+                self.charge -= 1.8
+                self.meter_emptying = now
+        if not self.player.laser_not_ready:
+            self.laser_not_ready = right_now + 2000
+        if self.player.laser_not_ready:
+            if self.laser_not_ready > right_now:
+                text.draw_text(self.screen, 'LASER NOT CHARGED', 20, 140, 522, constants.RED, "Haettenschweiler")
+            else:
+                self.player.laser_not_ready = False
 
     def paused(self):
         text.draw_text(self.screen, "Paused", 200, 400, 120, constants.BLUE, "ariel")

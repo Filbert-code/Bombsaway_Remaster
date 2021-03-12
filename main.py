@@ -36,7 +36,7 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
     menu_timer = pygame.time.get_ticks()
     player = player_module.Player()
-    current_level = Level_03(player, screen, clock)
+    current_level = Level_01(player, screen, clock)
     current_level_no = 1
 
     # game loop
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
         current_level.update()
         # updates the background position to create the scrolling affect
-        current_level.starting_pos += 3
+        current_level.starting_pos += 25
         current_level.total = current_level.starting_pos
         if current_level.total > current_level.starting_pos*-1:
             current_level.total = 0
