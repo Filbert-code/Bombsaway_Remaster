@@ -61,11 +61,7 @@ class Level_01(Level):
 
         # Level Summary tracking information:
 
-        self.total_fighters_killed = 0
-        self.total_fighters = 0
-        self.total_helicopters_killed = 0
-        self.total_helicopters = 0
-        self.total_tanks = 0
+
 
 
         self.new_player = 0
@@ -247,43 +243,7 @@ class Level_01(Level):
 
 
 
-    def laser_kill(self):
-        if len(self.laser_group.sprites()) > 0:
-            mob_hits = pygame.sprite.groupcollide(self.mobs, self.laser_group, True, False)
-            for every in mob_hits:
-                self.total_fighters_killed += 1
-                self.score += 5000
-                expl = explosions.Explosion(every.rect.center, 'sm')
-                self.all_sprites.add(expl)
-                explode = random.randrange(2)
-                if explode == 1:
-                    self.exp1_sound.play()
-                else:
-                    self.exp2_sound.play()
-            tank_hits = pygame.sprite.groupcollide(self.tanks, self.laser_group, False, False)
-            for every in tank_hits:
-                self.tank_life -= 0.05
-                # expl = explosions.Explosion((every.rect.centerx, every.rect.bottom), 'sm')
-                # self.all_sprites.add(expl)
 
-            heli_hits = pygame.sprite.groupcollide(self.helicopters, self.laser_group, False, False)
-            for every in heli_hits:
-                # self.total_fighters_killed += 1
-                # self.score += 5000
-                self.heli_life -= 0.05
-                # expl = explosions.Explosion(every.rect.center, 'sm')
-                # self.all_sprites.add(expl)
-                # explode = random.randrange(2)
-                # if explode == 1:
-                #     self.exp1_sound.play()
-                # else:
-                #     self.exp2_sound.play()
-            mob_bullet_hits = pygame.sprite.groupcollide(self.mob_bullets, self.laser_group, True, False)
-
-            if self.spawned_a_boss == 1:
-                boss_hits = pygame.sprite.groupcollide(self.boss_sprite, self.laser_group, False, False)
-                for every in boss_hits:
-                    self.boss.life -= 0.25
 
     def laser_meter(self):
         self.laser_sound = pygame.mixer.Sound('sounds/laser_beam_1.wav')

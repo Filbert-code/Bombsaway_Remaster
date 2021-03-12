@@ -1,5 +1,7 @@
 import pygame
 from os import path
+import os
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (1200,300) # moves the position of the window
 import player_module
 import explosions
 import menu, animations
@@ -9,6 +11,8 @@ from Level import Level
 from Level_01 import Level_01
 from Level_02 import Level_02
 from Level_03 import Level_03
+
+
 
 # Level 1 Background Art from Kenny.nl game asset store
 # Level 2 Background Art from Adam Saltsman --> Check out his work: https://adamatomic.itch.io/
@@ -82,7 +86,7 @@ if __name__ == "__main__":
 
         current_level.update()
         # updates the background position to create the scrolling affect
-        current_level.starting_pos += 5
+        current_level.starting_pos += 3
         current_level.total = current_level.starting_pos
         if current_level.total > current_level.starting_pos*-1:
             current_level.total = 0
