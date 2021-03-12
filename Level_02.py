@@ -1,11 +1,11 @@
 import pygame
 import mob, boss, boss_2
-import powerup, explosions
+import powerup
 import animations, purgatory
-import text, random, constants
+import text, constants
 import mob_01_left, mob_01_right, mob_02_left, mob_02_right
-import mob_03_left,mob_03_right,mob_04_left, mob_04_right
-import tank, helicopter, summary, civilian
+import mob_03_left,mob_03_right
+import tank, helicopter, summary
 from Level import Level
 
 # Second level
@@ -29,13 +29,10 @@ class Level_02(Level):
         self.spawned_a_boss = 0
         self.spawn_powerups()
 
-
         self.last_bomb = pygame.time.get_ticks()
         self.last_bomb_anim = pygame.time.get_ticks()
         self.mob_01_delay = pygame.time.get_ticks()
         self.mob_02_delay = pygame.time.get_ticks()
-
-
         self.number_of_tank_hits = 0
         self.tank_life = 5
         self.number_of_heli_hits = 0
@@ -103,7 +100,6 @@ class Level_02(Level):
         if self.spawned_a_boss > 0:
             self.health_bar()
 
-
     def spawn_powerups(self):
         for i in range(1):
             new_power1 = powerup.Powerup(-1500, 1)
@@ -117,7 +113,6 @@ class Level_02(Level):
             new_power3 = powerup.Powerup(-2000, 3)
             self.all_sprites.add(new_power3)
             self.gun_powerups.add(new_power3)
-
 
     def mob_draw(self):
         if self.starting_pos > -7000:
@@ -147,9 +142,6 @@ class Level_02(Level):
         if -1200 > self.starting_pos > -800:
             self.shooting_mobs(0, -30, 100, 2, 0, 1, 1000)
 
-
-
-
     def boss_spawn(self):
         if self.total == 0 and len(self.mobs) == 0 and self.spawned_a_boss == 0:
             self.boss = boss_2.Boss_2()
@@ -166,19 +158,14 @@ class Level_02(Level):
                 self.boss.kill()
 
     def spawn_portal(self):
-        print("portal frames" + str(self.portal_frame))
         if self.portal_frame > 7:
             self.portal_frame = 0
         now = pygame.time.get_ticks()
         if now - self.last_portal_anim > 20:
-            print("going through anims")
             self.last_portal_anim = now
             self.portal_frame += 1
-        print(0,self.boss.rect.x+86, self.boss.rect.y+146)
-        print(1,self.player.rect.centerx - 75, self.player.rect.bottom-50)
-        if ((self.boss.rect.y+146)-20 <= self.player.rect.bottom - 50 < (self.boss.rect.y+146)+20):
-            if ((self.boss.rect.x)-20 <= self.player.rect.centerx - 75 < (self.boss.rect.x)+20):
-                print("in position for warp")
+        if (self.boss.rect.y+146)-20 <= self.player.rect.bottom - 50 < (self.boss.rect.y+146)+20:
+            if self.boss.rect.x-20 <= self.player.rect.centerx - 75 < self.boss.rect.x+20:
                 self.portal_activated = True
 
     def health_bar(self):

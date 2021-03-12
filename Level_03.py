@@ -1,11 +1,10 @@
 import pygame
-import mob, boss, boss_3, boss_minion
-import powerup, explosions
-import animations, purgatory
-import text, random, constants
-import mob_01_left, mob_01_right, mob_02_left, mob_02_right
-import mob_03_left,mob_03_right,mob_04_left, mob_04_right
-import tank, helicopter, summary, civilian
+import mob, boss_3, boss_minion
+import powerup
+import animations
+import text, constants
+import mob_01_left, mob_01_right
+import tank, helicopter, summary
 from Level import Level
 
 # Third level
@@ -27,20 +26,14 @@ class Level_03(Level):
         self.bomb_frame = 20
         self.spawned_a_boss = 0
         self.spawn_powerups()
-
-
         self.last_bomb = pygame.time.get_ticks()
         self.last_bomb_anim = pygame.time.get_ticks()
         self.mob_01_delay = pygame.time.get_ticks()
         self.mob_02_delay = pygame.time.get_ticks()
         self.laser_charge_time = pygame.time.get_ticks()
-
-
         self.total_helicopters = 0
         self.total_tanks = 0
-
         self.number_of_tank_hits = 0
-
         self.number_of_heli_hits = 0
 
         self.mob_v2_time = pygame.time.get_ticks()
@@ -108,7 +101,6 @@ class Level_03(Level):
         if self.spawned_a_boss > 0 and self.boss.new_sequence > 0:
             self.health_bar()
 
-
     def spawn_powerups(self):
         # for i in range(12):
         #     new_power = powerup.Powerup(i*-1000, 0)
@@ -126,7 +118,6 @@ class Level_03(Level):
             new_power3 = powerup.Powerup(-2000, 3)
             self.all_sprites.add(new_power3)
             self.gun_powerups.add(new_power3)
-
 
     def mob_draw(self):
         if -6200 > self.starting_pos > -7000:
@@ -156,7 +147,6 @@ class Level_03(Level):
             self.boss_sprite.add(self.boss)
             self.spawned_a_boss = 1
 
-
     def boss_damage(self):
         if self.spawned_a_boss == 1:
             hits_list = []
@@ -164,7 +154,7 @@ class Level_03(Level):
                 hits = pygame.sprite.collide_circle(self.boss, bullet)
                 hits_list.append(hits)
                 for every in hits_list:
-                    if hits_list[every-1] == True:
+                    if hits_list[every-1]:
                         bullet.kill()
                         self.boss.life -= 1
                         hits_list[every-1] = False
@@ -181,7 +171,6 @@ class Level_03(Level):
         text.draw_text(self.screen, 'HEALTH: ', 24, 100, 7, constants.BLACK, "ariel")
         self.screen.blit(image, (135, 5))
 
-
     def level_summary(self):
         spawns = 0
         for i in range(8):
@@ -195,20 +184,6 @@ class Level_03(Level):
         summary.total_tanks_killed += self.total_tanks_killed
         summary.total_helicopters += self.total_helicopters
         summary.total_helicopters_killed += self.total_helicopters_killed
-
-    def new_level(self):
-        self.player.kill()
-        self.all_sprites.empty()
-        self.mob_bullets.empty()
-        self.bullets.empty()
-        mob_01_left.bullets_group.empty()
-        mob_01_right.bullets_group.empty()
-        mob_02_left.bullets_group.empty()
-        mob_02_right.bullets_group.empty()
-        mob_03_left.bullets_group.empty()
-        mob_03_right.bullets_group.empty()
-        boss.bullets_group.empty()
-        purgatory.level_2_summary()
 
     def player_position(self):
         tank.player_position = [self.player.rect.centerx, self.player.rect.centery]

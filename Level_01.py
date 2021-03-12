@@ -1,12 +1,11 @@
 import pygame
-import mob, boss, menu, player_module
-import powerup, explosions
+import mob, boss
+import powerup
 import animations, cars, purgatory
-import text, random, constants
+import text, constants
 import mob_01_left, mob_01_right, mob_02_left, mob_02_right
-import mob_03_left,mob_03_right,mob_04_left, mob_04_right
-import tank, helicopter, summary, civilian
-from os import path
+import mob_03_left,mob_03_right
+import tank, helicopter, summary
 from Level import Level
 
 
@@ -22,14 +21,11 @@ class Level_01(Level):
         self.player = player
         self.screen = screen
         self.clock = clock
+
         ##############
         # Level-child attributes:
         self.total = None
-
-
         self.spawn_powerups()
-
-
         self.cars_up_images = []
         self.cars_down_images = []
         self.cars_up_y = {}
@@ -47,13 +43,7 @@ class Level_01(Level):
         self.mob_01_delay = pygame.time.get_ticks()
         self.mob_02_delay = pygame.time.get_ticks()
         self.laser_charge_time = pygame.time.get_ticks()
-
         self.last_bomb_anim = pygame.time.get_ticks()
-
-        # Level Summary tracking information:
-
-
-
 
         self.new_player = 0
         self.player_input = 0
@@ -167,7 +157,6 @@ class Level_01(Level):
                     if self.cars_down_y[lst][car] > 3840:
                         self.cars_down_y[lst][car] -= 3870
 
-
     def spawn_powerups(self):
         # for i in range(12):
         #     new_power = powerup.Powerup(i*-1000, 0)
@@ -185,7 +174,6 @@ class Level_01(Level):
             new_power3 = powerup.Powerup(-1500, 3)
             self.all_sprites.add(new_power3)
             self.gun_powerups.add(new_power3)
-
 
     def mob_draw(self):
         if self.starting_pos > -6000 and self.civ_count < 1:
@@ -206,7 +194,6 @@ class Level_01(Level):
             self.shooting_mobs(0, -30, 100, 3, 0, 1, 750)
         if self.starting_pos > -1800:
             self.mob_spawn_02_right()
-
 
     def boss_spawn(self):
         if self.total == 0 and len(self.mobs) == 0 and self.spawned_a_boss == 0:
@@ -243,7 +230,6 @@ class Level_01(Level):
             image = animations.boss_health_images[0]
         text.draw_text(self.screen, 'HEALTH: ', 24, 100, 7, constants.BLACK, "ariel")
         self.screen.blit(image, (135, 5))
-
 
     def level_summary(self):
         spawns = 0
