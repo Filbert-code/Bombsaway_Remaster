@@ -10,7 +10,7 @@ from Level import Level
 # Third level
 class Level_03(Level):
     def __init__(self, player, screen, clock):
-        Level.__init__(self, player)
+        Level.__init__(self, player, screen)
         self.all_sprites.add(player)
         # background tileset creations from https://twitter.com/gallet_city
         self.background = pygame.image.load('backgrounds/level_3_bg.jpg').convert()

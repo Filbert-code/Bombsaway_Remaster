@@ -12,7 +12,7 @@ from Level import Level
 # First level
 class Level_01(Level):
     def __init__(self, player, screen, clock):
-        Level.__init__(self, player)
+        Level.__init__(self, player, screen)
         self.background = pygame.image.load('backgrounds/rural_city_map16.png').convert()
         self.all_sprites.add(self.player)
         pygame.mixer.music.load('sounds/chiptunes_level_1.wav')
