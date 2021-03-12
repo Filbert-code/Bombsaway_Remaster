@@ -254,6 +254,14 @@ class Level:
                 if self.spawned_a_boss == 1:
                     self.boss.life -= 20
 
+    def bomb_animation(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_bomb_anim > 20:
+            self.last_bomb_anim = now
+            self.screen.blit(animations.bombsaway_anim[self.bomb_frame], \
+            (self.player.rect.centerx-(self.bomb_frame+1)*50, self.player.rect.centery-(self.bomb_frame+1)*float(37.5)))
+            self.bomb_frame += 1
+
     def powerup_speed(self):
         powerup_sound = pygame.mixer.Sound('sounds/ammo_powerup1.wav')
         powerup_sound.set_volume(0.3)
